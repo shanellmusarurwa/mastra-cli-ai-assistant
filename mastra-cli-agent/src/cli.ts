@@ -28,6 +28,9 @@ function ask() {
         content: input,
       };
 
+      // 👇 Added thinking message
+      console.log("Assistant is thinking...");
+
       const result = await assistantAgent.generate([message]);
 
       console.log("Assistant:", result.text);
