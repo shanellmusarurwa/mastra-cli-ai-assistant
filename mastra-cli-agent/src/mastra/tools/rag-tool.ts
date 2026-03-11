@@ -1,4 +1,4 @@
-import { createTool } from "@mastra/core/dist/tools";
+import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 
 const documents = [
@@ -8,14 +8,14 @@ const documents = [
 ];
 
 export const ragTool = createTool({
-  id: "rag-tool",
+  id: "rag",
   description: "Retrieve knowledge from local documents",
 
   inputSchema: z.object({
     question: z.string(),
   }),
 
-  execute: async ({ question }) => {
+  async execute({ question }) {
     const result = documents.find((doc) =>
       doc.toLowerCase().includes(question.toLowerCase()),
     );

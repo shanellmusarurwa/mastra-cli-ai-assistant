@@ -1,7 +1,7 @@
-import { tool } from "@mastra/core";
+import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 
-export const weatherTool = tool({
+export const weatherTool = createTool({
   id: "weather",
   description: "Get weather information for a city",
 
@@ -9,7 +9,7 @@ export const weatherTool = tool({
     city: z.string(),
   }),
 
-  execute: async ({ city }: { city: string }) => {
+  async execute({ city }) {
     return {
       city,
       weather: "Sunny",

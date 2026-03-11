@@ -1,4 +1,4 @@
-import { createTool } from "@mastra/core/dist/tools";
+import { createTool } from "@mastra/core/tools";
 import { z } from "zod";
 
 export const searchTool = createTool({
@@ -9,7 +9,7 @@ export const searchTool = createTool({
     query: z.string(),
   }),
 
-  execute: async ({ query }: { query: string }) => {
+  async execute({ query }) {
     return {
       results: `Results for query: ${query}`,
     };

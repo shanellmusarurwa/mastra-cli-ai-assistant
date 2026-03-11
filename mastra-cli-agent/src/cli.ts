@@ -1,20 +1,16 @@
 import "dotenv/config";
 import readline from "node:readline";
-import { workspace } from "./mastra/workspace";
+import { assistantAgent } from "./mastra/agents/assistant-agent.js";
+
+type Message = {
+  role: "user" | "assistant" | "system";
+  content: string;
+};
 
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
-const agent = workspace.getAgent("assistant-agent");
-
-interface Message {
-  role: string;
-  content: string;
-}
-
-const history: Message[] = [];
 
 console.log("🤖 Mastra CLI Assistant Started");
 console.log("Type 'exit' to quit\n");
@@ -27,30 +23,21 @@ function ask() {
     }
 
     try {
-      history.push({ role: "user", content: input });
+      const message: Message = {
+        role: "user",
+        content: input,
+      };
 
-      const stream = await agent.stream({
-        messages: history,
-      });
+      const result = await assistantAgent.generate([message]);
 
-      process.stdout.write("Assistant: ");
-
-      for await (const chunk of stream) {
-        process.stdout.write(chunk);
-      }
-
-      console.log("\n");
+      console.log("Assistant:", result.text);
+      console.log("");
     } catch (err) {
-      console.error("Error communicating with agent:", err);
+      console.error("Agent Error:", err);
     }
 
     ask();
   });
 }
-
-process.on("SIGINT", () => {
-  console.log("\nExiting...");
-  process.exit(0);
-});
 
 ask();
